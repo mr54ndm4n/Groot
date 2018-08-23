@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 
 namespace Groot
  {
-     public class Groot
+     public static class Groot
      {
 
-         public static List<OUT> CsvReaderIters<OUT>(string filePath, Func<IEnumerable<(string, string)>, OUT> fn)
+         public static List<TOut> CsvReaderIters<TOut>(string filePath, Func<IEnumerable<(string, string)>, TOut> fn)
          {
              var csvlines = File.ReadAllLines(filePath);
              var header = csvlines[0].Split(',').Select(s => s.Trim()).ToList();
@@ -22,21 +23,28 @@ namespace Groot
                      .Zip(enumRange, (value, idx) => (header[idx], value)))).ToList();
          }
          
-         public static List<Dictionary<string, string>> GetDictFromCsv(string filePath)
+         public static IEnumerable<Dictionary<string, string>> GetDictFromCsv(string filePath)
          {
              return CsvReaderIters(filePath, xs => xs.ToDictionary(x => x.Item1.Trim(), x => x.Item2.Trim()));
          }
 
-         public static List<T> GetObjectFromCsv<T>(string filePath)
+         public static IEnumerable<T> GetObjectFromCsv<T>(string filePath)
          {
-             Type type = typeof(T);
+             var type = typeof(T);
+             var propCollection = type.GetProperties();
              return GetDictFromCsv(filePath).Select(elem =>
              {
-                 T tElem = (T) Activator.CreateInstance(typeof(T), new object[] { });
-                 foreach (KeyValuePair<string, string> x in elem)
+                 var tElem = (T) Activator.CreateInstance(typeof(T), new object[] { });
+                 foreach (var x in elem)
                  {
-                     PropertyInfo prop = type.GetProperty(x.Key);
-                     prop.SetValue(tElem, Convert.ChangeType(x.Value, prop.PropertyType), null);
+                     type.GetProperties()
+                         .Where(property => property.GetCustomAttributes<GrootFieldAttribute>()
+                             .Any(grootAttr => grootAttr.GetGrootFields() == x.Key)
+                         ).ToList()
+                         .ForEach(prop =>
+                         {
+                             prop.SetValue(tElem, Convert.ChangeType(x.Value, prop.PropertyType), null);
+                         });
                  }
                  return tElem;
              }).ToList();

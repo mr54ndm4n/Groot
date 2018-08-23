@@ -1,6 +1,5 @@
-intColumn, int2Column, stringColumn, booleanColumn, decimalColumn, decimal2Column, longNullableColumn
-1,10,"one",true,2.392,230.82744, 2372837
-2,9,"two",false,23.12,36.42, 283623612
-3,8,"three",true,39,61.87, 86452473
-4,7,"four",false,33.0,42.53, 29383849
-5,6,"five",true,21.299,35.47, 424827384
+name, is_tree_dicotyledon, tree_width, tree_height
+peter, true, 23.23, 32.11
+juan, true, 38.27, 125.48
+paul, false, 23.83, 232.29
+emanuel, true, 20, 1392.2
