@@ -10,18 +10,20 @@ namespace Groot
             Console.WriteLine("Hello World!");
             var path = Path.GetFullPath("input/input.csv");
 
-            var iamGrootObject = Groot.GetObjectFromCsv<Tree>(path);
+            var iamGrootObject = Groot.GetObjectFromCsv<Tree>(path, false);
             Console.WriteLine("eiei");
         }
     }
 
     public class Tree
     {
-        [GrootField("name")]
-        public string Name { get; set; }
+        [GrootField("Name")]
+        public string Name1 { get; set; }
         
-        [GrootField("name")]
+        [GrootField("Name")]
         public string Name2 { get; set; }
+        
+        public string Name { get; set; }
         
         [GrootField("is_tree_dicotyledon")]
         public bool IsDicotyledon { get; set; }

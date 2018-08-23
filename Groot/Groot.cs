@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
@@ -9,8 +10,7 @@ namespace Groot
  {
      public static class Groot
      {
-
-         public static List<TOut> CsvReaderIters<TOut>(string filePath, Func<IEnumerable<(string, string)>, TOut> fn)
+         private static List<TOut> CsvReaderIters<TOut>(string filePath, Func<IEnumerable<(string, string)>, TOut> fn)
          {
              var csvlines = File.ReadAllLines(filePath);
              var header = csvlines[0].Split(',').Select(s => s.Trim()).ToList();
@@ -28,7 +28,7 @@ namespace Groot
              return CsvReaderIters(filePath, xs => xs.ToDictionary(x => x.Item1.Trim(), x => x.Item2.Trim()));
          }
 
-         public static IEnumerable<T> GetObjectFromCsv<T>(string filePath)
+         public static IEnumerable<T> GetObjectFromCsv<T>(string filePath, bool autoMapForNoCustomAttr = true)
          {
              var type = typeof(T);
              var propCollection = type.GetProperties();
@@ -37,14 +37,33 @@ namespace Groot
                  var tElem = (T) Activator.CreateInstance(typeof(T), new object[] { });
                  foreach (var x in elem)
                  {
-                     type.GetProperties()
+
+                     IEnumerable<PropertyInfo> propertyEnumerable;
+                     
+                     var matchedCustomAttrProp = type.GetProperties()
                          .Where(property => property.GetCustomAttributes<GrootFieldAttribute>()
                              .Any(grootAttr => grootAttr.GetGrootFields() == x.Key)
-                         ).ToList()
+                         );
+                     
+                     if (autoMapForNoCustomAttr)
+                     {
+                         var matchedFieldNamePropWithNoCustomAttr = type.GetProperties()
+                             .Where(property => !property.GetCustomAttributes<GrootFieldAttribute>().Any())
+                             .Where(property => property.Name == x.Key);
+                         propertyEnumerable = matchedCustomAttrProp.Concat(matchedFieldNamePropWithNoCustomAttr);
+                     }
+                     else
+                     {
+                         propertyEnumerable = matchedCustomAttrProp;
+                     }
+                     
+                     propertyEnumerable
+                         .ToList()
                          .ForEach(prop =>
                          {
                              prop.SetValue(tElem, Convert.ChangeType(x.Value, prop.PropertyType), null);
                          });
+
                  }
                  return tElem;
              }).ToList();
