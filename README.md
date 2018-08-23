@@ -4,7 +4,7 @@ Just a CSV Util Package! keep it simple, let's groot do it for you!
 
 Input Examples (CSV Format)
 ```csv
-  name, height
+  name, tree_height
   groot, 36.468
   another_groot, 24.128
   more_groot, 24.35
@@ -20,9 +20,14 @@ Input Examples (CSV Format)
   #Tree
   public class Tree
   {
-    public string name { get; set; }
-    public decimal height { get; set; }
+        [GrootField("name")]
+        public string name { get; set; }
+        
+        [GrootField("tree_height")]
+        public decimal Height { get; set; }
   }
+  
+  //GrootField is the header column in csv files
   
   var iamGroots = Groot.GetObjectFromCsv<Tree>(path);
   Console.WriteLine($"Groot's height is {iamGroots[0].height}");
