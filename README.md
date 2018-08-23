@@ -24,7 +24,7 @@ Input Examples (CSV Format)
     public decimal height { get; set; }
   }
   
-  var iamGroots = Groot.Groot.GetObjectFromCsv<Tree>(path);
+  var iamGroots = Groot.GetObjectFromCsv<Tree>(path);
   Console.WriteLine($"Groot's height is {iamGroots[0].height}");
   
 ```
