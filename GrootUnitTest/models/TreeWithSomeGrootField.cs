@@ -1,21 +1,8 @@
-﻿using System;
-using System.IO;
+﻿using Groot;
 
-namespace Groot
+namespace GrootUnitTest.models
 {
-    class Program
-    {
-        public static void Main(string[] args)
-        {
-            Console.WriteLine("Hello World!");
-            var path = Path.GetFullPath("input/input.csv");
-
-            var iamGrootObject = Groot.GetObjectFromCsv<Tree>(path, false);
-            Console.WriteLine("eiei");
-        }
-    }
-
-    public class Tree
+    public class TreeWithSomeGrootField
     {
         [GrootField("Name")]
         public string Name1 { get; set; }
