@@ -4,6 +4,7 @@ mono: none
 dotnet: 2.1.300
 install:
 - dotnet restore
+- dotnet tool install --global altcover.global
 script:
 - dotnet build
 - dotnet test /p:AltCover=true
