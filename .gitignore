@@ -34,3 +34,5 @@ msbuild.wrn
 .vs/
 
 .idea/
+
+coverage.xml
