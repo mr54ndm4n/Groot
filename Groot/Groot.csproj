@@ -1,5 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <DebugType>full</DebugType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="AltCover" Version="4.0.644" />
+  </ItemGroup>
 </Project>

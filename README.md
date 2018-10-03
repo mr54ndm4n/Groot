@@ -1,6 +1,6 @@
 # I am Groot
 [![Build Status](https://travis-ci.com/DreamN/Groot.svg?branch=master)](https://travis-ci.com/DreamN/Groot)
-
+[![codecov](https://codecov.io/gh/DreamN/Groot/branch/master/graph/badge.svg)](https://codecov.io/gh/DreamN/Groot)
 
 https://www.nuget.org/packages/Groot/1.0.0#
 
