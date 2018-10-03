@@ -4,6 +4,10 @@ mono: none
 dotnet: 2.1.300
 install:
 - dotnet restore
+- dotnet tool install --global altcover.global
 script:
 - dotnet build
-- dotnet test GrootUnitTest/GrootUnitTest.csproj
+- dotnet test GrootUnitTest/GrootUnitTest.csproj /p:AltCover=true
+- curl -s https://codecov.io/bash > codecov
+- chmod +x codecov
+- ./codecov -f "GrootUnitTest/coverage.xml" -t "91b8a913-3fc4-4e71-ae68-4a8295d7ebda"
