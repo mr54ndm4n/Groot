@@ -40,14 +40,14 @@ namespace Groot
 
                      IEnumerable<PropertyInfo> propertyEnumerable;
                      
-                     var matchedCustomAttrProp = type.GetProperties()
+                     var matchedCustomAttrProp = propCollection
                          .Where(property => property.GetCustomAttributes<GrootFieldAttribute>()
                              .Any(grootAttr => grootAttr.GetGrootFields() == x.Key)
                          );
                      
                      if (autoMapForNoCustomAttr)
                      {
-                         var matchedFieldNamePropWithNoCustomAttr = type.GetProperties()
+                         var matchedFieldNamePropWithNoCustomAttr = propCollection
                              .Where(property => !property.GetCustomAttributes<GrootFieldAttribute>().Any())
                              .Where(property => property.Name == x.Key);
                          propertyEnumerable = matchedCustomAttrProp.Concat(matchedFieldNamePropWithNoCustomAttr);
