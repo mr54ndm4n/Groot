@@ -22,6 +22,21 @@ namespace Groot
                      .ToList()
                      .Zip(enumRange, (value, idx) => (header[idx], value)))).ToList();
          }
+
+//         public static bool ToCsvFile<T>(string filePath, IEnumerable<T> objList)
+//         {
+//             var type = typeof(T);
+//             var properties = type.GetProperties();
+//             string content = string.Join(",", properties.Select(property => property.GetCustomAttributes<GrootFieldAttribute>().Select(attr => attr.))
+//
+//             foreach (var o in objList)
+//             {
+//                 
+//             }
+//             
+//            
+//           
+//         }
          
          public static IEnumerable<Dictionary<string, string>> GetDictFromCsv(string filePath)
          {
@@ -40,14 +55,14 @@ namespace Groot
 
                      IEnumerable<PropertyInfo> propertyEnumerable;
                      
-                     var matchedCustomAttrProp = type.GetProperties()
+                     var matchedCustomAttrProp = propCollection
                          .Where(property => property.GetCustomAttributes<GrootFieldAttribute>()
                              .Any(grootAttr => grootAttr.GetGrootFields() == x.Key)
                          );
                      
                      if (autoMapForNoCustomAttr)
                      {
-                         var matchedFieldNamePropWithNoCustomAttr = type.GetProperties()
+                         var matchedFieldNamePropWithNoCustomAttr = propCollection
                              .Where(property => !property.GetCustomAttributes<GrootFieldAttribute>().Any())
                              .Where(property => property.Name == x.Key);
                          propertyEnumerable = matchedCustomAttrProp.Concat(matchedFieldNamePropWithNoCustomAttr);
