@@ -61,7 +61,7 @@ namespace Groot
                          .ToList()
                          .ForEach(prop =>
                          {
-                             prop.SetValue(tElem, Convert.ChangeType(x.Value, prop.PropertyType), null);
+                             prop.SetValue(tElem, ChangeType(prop, x.Value), null);
                          });
 
                  }
@@ -70,6 +70,14 @@ namespace Groot
              
          }
          
-         
+         private static object ChangeType(PropertyInfo prop, string value)
+         {
+            if (prop.PropertyType.IsEnum)
+              return Enum.Parse(prop.PropertyType, value);
+
+            return Convert.ChangeType(value, prop.PropertyType);
+         }
+
+
      }
  }
