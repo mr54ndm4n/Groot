@@ -5,9 +5,10 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace Groot
- {
+ {  
      public static class Groot
      {
          private static List<TOut> CsvReaderIters<TOut>(string filePath, Func<IEnumerable<(string, string)>, TOut> fn)
@@ -78,6 +79,49 @@ namespace Groot
             return Convert.ChangeType(value, prop.PropertyType);
          }
 
+        public static string CreateCsvFromList<T>(List<T> objList, string filePath)
+        {
 
-     }
- }
+            var csv = new StringBuilder();
+            var props = typeof(T).GetProperties();
+
+            foreach (var prop in props)
+            {
+
+                if (prop.GetCustomAttributes(true).Length > 0)
+                {
+                    var grootAttr = (GrootFieldAttribute)prop.GetCustomAttributes(true).GetValue(0);
+                    csv.Append(grootAttr.GetGrootFields() + ", ");
+                }
+                else
+                {
+                    csv.Append(prop.Name + ", ");
+                }
+            }
+            csv = csv.Remove(csv.Length - 2, 2);
+            csv.AppendLine();
+
+            foreach (var obj in objList)
+            {
+                foreach (var prop in props)
+                {
+                    if (prop.PropertyType.IsEnum)
+                    {
+                        var name = Enum.GetName(prop.PropertyType, prop.GetValue(obj));
+                        csv.Append(name + ", ");
+                    }
+                    else
+                    {
+                        csv.Append(prop.GetValue(obj) + ", ");
+                    }
+                }
+                csv = csv.Remove(csv.Length - 2, 2);
+                csv.AppendLine();
+            }
+
+            File.WriteAllText(filePath, csv.ToString());
+            return csv.ToString();
+        }
+
+    }
+}
