@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
@@ -78,6 +79,26 @@ namespace Groot
             return Convert.ChangeType(value, prop.PropertyType);
          }
 
+        public static string csvToJson(string filePath)
+        {
+            var csvlines = File.ReadAllLines(filePath);
+            var header = csvlines[0].Split(',').Select(s => s.Trim()).ToList();
+            JArray array = new JArray();
+            for (int i = 1; i < csvlines.Length; i++)
+            {
+                JObject jObject = new JObject();
 
-     }
+                var col = csvlines[i].Split(',').Select(s => s.Trim()).ToList();
+                for (int j = 0; j < header.Count; j++)
+                {
+                    jObject.Add(header[j], col[j]);
+                }
+
+                array.Add(jObject);
+
+            }
+
+            return array.ToString();
+        }
+    }
  }
