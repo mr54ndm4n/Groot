@@ -8,6 +8,9 @@ namespace GrootUnitTest.test
     [TestClass]
     public class GetObjectFromCsvTest
     {
+        private const string itemName = "itema";
+        private const string mappedFieldWithNoCustomAttr = "mappedFieldWithCustomAttr";
+
         [TestMethod]
         public void AutoMapForNoCustomAttr()
         {
@@ -45,6 +48,40 @@ namespace GrootUnitTest.test
             Assert.AreEqual(false, paul.IsDicotyledon, "mappedFieldWithCustomAttr");
             Assert.AreEqual(23.83M, paul.Width, "mappedFieldWithCustomAttr");
             Assert.AreEqual(232.29M, paul.Height, "mappedFieldWithCustomAttr");
+
+        }
+        
+        [TestMethod]
+        public void AutoMapForNoCustomAttrUsingEnum()
+        {
+            var path = Path.GetFullPath("resources/item.csv");
+            var types = Groot.Groot.GetObjectFromCsv<models.Item>(path);
+            
+            Assert.AreEqual(3, types.Count(), "rows amount");
+
+            var itema = types.First(t => t.Name == itemName);
+            
+            Assert.IsNotNull(itema);
+            Assert.AreEqual(itemName, itema.Name, mappedFieldWithNoCustomAttr);
+            Assert.AreEqual(68, itema.Amount, mappedFieldWithNoCustomAttr);
+            Assert.AreEqual(models.ItemType.Plastic, itema.Type, mappedFieldWithNoCustomAttr);
+
+        }
+
+        [TestMethod]
+        public void NoAutoMapForNoCustomAttrUsingEnum()
+        {
+            var path = Path.GetFullPath("resources/item.csv");
+            var types = Groot.Groot.GetObjectFromCsv<models.Item>(path, false);
+            
+            Assert.AreEqual(3, types.Count(), "rows amount");
+
+            var itema = types.First(t => t.Name == itemName);
+            
+            Assert.IsNotNull(itema);
+            Assert.AreEqual(itemName, itema.Name, mappedFieldWithNoCustomAttr);
+            Assert.AreEqual(68, itema.Amount, mappedFieldWithNoCustomAttr);
+            Assert.AreEqual(models.ItemType.Plastic, itema.Type, mappedFieldWithNoCustomAttr);
 
         }
     }
