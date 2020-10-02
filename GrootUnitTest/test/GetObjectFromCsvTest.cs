@@ -8,8 +8,8 @@ namespace GrootUnitTest.test
     [TestClass]
     public class GetObjectFromCsvTest
     {
-        private const string itemName = "itema";
-        private const string mappedFieldWithNoCustomAttr = "mappedFieldWithCustomAttr";
+        private const string ItemName = "itema";
+        private const string MappedFieldWithNoCustomAttr = "mappedFieldWithCustomAttr";
 
         [TestMethod]
         public void AutoMapForNoCustomAttr()
@@ -59,12 +59,12 @@ namespace GrootUnitTest.test
             
             Assert.AreEqual(3, types.Count(), "rows amount");
 
-            var itema = types.First(t => t.Name == itemName);
+            var itema = types.First(t => t.Name == ItemName);
             
             Assert.IsNotNull(itema);
-            Assert.AreEqual(itemName, itema.Name, mappedFieldWithNoCustomAttr);
-            Assert.AreEqual(68, itema.Amount, mappedFieldWithNoCustomAttr);
-            Assert.AreEqual(models.ItemType.Plastic, itema.Type, mappedFieldWithNoCustomAttr);
+            Assert.AreEqual(ItemName, itema.Name, MappedFieldWithNoCustomAttr);
+            Assert.AreEqual(68, itema.Amount, MappedFieldWithNoCustomAttr);
+            Assert.AreEqual(models.ItemType.Plastic, itema.Type, MappedFieldWithNoCustomAttr);
 
         }
 
@@ -76,12 +76,12 @@ namespace GrootUnitTest.test
             
             Assert.AreEqual(3, types.Count(), "rows amount");
 
-            var itema = types.First(t => t.Name == itemName);
+            var itema = types.First(t => t.Name == ItemName);
             
             Assert.IsNotNull(itema);
-            Assert.AreEqual(itemName, itema.Name, mappedFieldWithNoCustomAttr);
-            Assert.AreEqual(68, itema.Amount, mappedFieldWithNoCustomAttr);
-            Assert.AreEqual(models.ItemType.Plastic, itema.Type, mappedFieldWithNoCustomAttr);
+            Assert.AreEqual(ItemName, itema.Name, MappedFieldWithNoCustomAttr);
+            Assert.AreEqual(68, itema.Amount, MappedFieldWithNoCustomAttr);
+            Assert.AreEqual(models.ItemType.Plastic, itema.Type, MappedFieldWithNoCustomAttr);
 
         }
     }
